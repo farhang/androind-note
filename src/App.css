@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.header {
+  transition: visibility 0s .1s, opacity .1s linear;
+  visibility: visible;
+  opacity: 1;
+  width: 100%;
+}

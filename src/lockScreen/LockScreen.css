@@ -10,3 +10,32 @@
     font-size: 1rem;
     margin-top: .5rem;
 }
+
+.footer {
+    position: fixed;
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+}
+
+.footer-header {
+    text-align: center;
+    margin-bottom: .5rem;
+}
+
+.footer-inner {
+    margin: 0 0rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-inner__item {
+    background-color: var(--secondary);
+    border-radius: .75rem;
+    padding: .25rem;
+}
+
+.footer-inner__item--phone {
+    transform: rotate(-135deg);
+    transition:
+}
