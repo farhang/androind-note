@@ -12,28 +12,33 @@ import Header from "./common/header/Header";
 import eventBus from "./common/Eventbus";
 
 function App() {
-    let visibility = 'visible';
-    eventBus.on("touchStatus", (event) => {
-        if(event.status === 'move' && visibility === 'visible') {
-            console.log('start')
-            visibility = 'hidden';
-            setStyles({
-                visibility: visibility,
-                opacity: 0,
-            })
-        } else  if (event.status === 'end'){
-            console.log('move')
-            visibility = 'visible';
-            setStyles({
-                visibility: visibility,
-                opacity: 1,
-            })
-        }
-    } );
+    const onTouchMove = (event) => {
+       // console.log('event', event)
+    }
+
+
+
 
     const [styles, setStyles] = useState({});
 
     useEffect(() => {
+        eventBus.on("DistanceCalculated", onTouchMove);
+        eventBus.on("touchStatus", (event) => {
+            console.log('touchStatus', event)
+            if (event.status === 'end') {
+                eventBus.remove("DistanceCalculated", onTouchMove);
+                setStyles({
+                    visibility: 'visible',
+                    opacity: 1,
+                })
+            } else  if (event.status === 'move') {
+                setStyles({
+                    visibility: 'hidden',
+                    opacity: 0,
+                })
+            }
+
+        });
 
     }, []);
   return (

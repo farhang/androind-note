@@ -7,8 +7,9 @@ function LockScreen() {
     const [currentHour, setCurrentHour] = useState('');
     const [currentMinute, setCurrentMinute] = useState('');
     const dateOptions = { weekday: 'short', day: 'numeric', month: 'long' };
+    let currentStatus = '';
+    let timeDistance = 0;
     let [x1, x2, y1, y2] = [0,0,0,0];
-    let touch = document.querySelector('#touch');
 
     useEffect(() => {
         handleDate();
@@ -18,26 +19,37 @@ function LockScreen() {
 
     const handleTouch = () => {
         const body = document.querySelector('body');
-        touch = document.querySelector('#touch');
         body.addEventListener('touchstart', handleGestureStart, false);
-        body.addEventListener('touchmove', handleGestureMove, {passive: true});
+        body.addEventListener('touchmove', handleGestureMove, false);
         body.addEventListener('touchend', handleGestureEnd, false);
     }
 
     const handleGestureStart =  (event) => {
-        touch.innerHTML = 'start';
+        currentStatus = 'start;'
         x1 =  event.touches[0].clientX;
         y1 =  event.touches[0].clientY;
+        timeDistance = event.timeStamp;
         console.log('start', event.touches[0].clientX)
         eventBus.dispatch("touchStatus", { status: 'start'})
     }
 
     const handleGestureMove =  (event) => {
-        touch.innerHTML = 'move';
-        x2 =  event.touches[0].clientX;
-        y2 =  event.touches[0].clientY;
-        eventBus.dispatch("DistanceCalculated", { value: calculateDistance(x1, y1, x2, y2)})
-        eventBus.dispatch("touchStatus", { status: 'move'})
+        if (currentStatus !== 'move') {
+            currentStatus = 'move';
+            eventBus.dispatch("touchStatus", { status: 'move'})
+        }
+        //console.log('move', event.timeStamp);
+        if(event.timeStamp - timeDistance > 50) {
+            timeDistance = event.timeStamp;
+            x2 =  event.touches[0].clientX;
+            y2 =  event.touches[0].clientY;
+            eventBus.dispatch("DistanceCalculated", { value: calculateDistance(x1, y1, x2, y2)})
+        }
+    }
+
+    const handleGestureEnd =  (event) => {
+        eventBus.dispatch("touchStatus", { status: 'end'})
+        console.log('end', event);
     }
 
     const calculateDistance = (cx1, cy1, cx2, cy2) => {
@@ -46,11 +58,6 @@ function LockScreen() {
         return Math.sqrt( a * a + b * b );
     }
 
-    const handleGestureEnd =  (event) => {
-        eventBus.dispatch("touchStatus", { status: 'end'})
-        touch.innerHTML = 'end';
-        console.log('end', event);
-    }
 
 
     const handleDate = () => {
