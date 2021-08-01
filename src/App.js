@@ -13,7 +13,8 @@ import Header from "./common/header/Header";
 function App() {
   return (
       <Router>
-          <Header></Header>
+          <Header>
+          </Header>
           <Switch>
             <Route path="/">
               <LockScreen />

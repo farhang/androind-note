@@ -1,0 +1,12 @@
+.time {
+    text-align: center;
+    font-size: 4rem;
+    margin-top: 6rem;
+    font-weight: lighter;
+}
+
+.date {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: .5rem;
+}
