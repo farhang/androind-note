@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -12,35 +11,33 @@ import Header from "./common/header/Header";
 import eventBus from "./common/Eventbus";
 
 function App() {
-    const onTouchMove = (event) => {
-       // console.log('event', event)
-    }
-
-
-
 
     const [styles, setStyles] = useState({});
+    const [distance, setDistance] = useState(0);
+    const onTouchMove = (event) => {
+       setDistance(event.distance);
+    }
+
+    const onTouchStatusChange = (event) => {
+        if (event.status === 'end') {
+            eventBus.remove("DistanceCalculated", onTouchMove);
+            setStyles({
+                visibility: 'visible',
+                opacity: 1,
+            })
+        } else  if (event.status === 'move') {
+            setStyles({
+                visibility: 'hidden',
+                opacity: 0,
+            })
+        }
+    };
 
     useEffect(() => {
         eventBus.on("DistanceCalculated", onTouchMove);
-        eventBus.on("touchStatus", (event) => {
-            console.log('touchStatus', event)
-            if (event.status === 'end') {
-                eventBus.remove("DistanceCalculated", onTouchMove);
-                setStyles({
-                    visibility: 'visible',
-                    opacity: 1,
-                })
-            } else  if (event.status === 'move') {
-                setStyles({
-                    visibility: 'hidden',
-                    opacity: 0,
-                })
-            }
-
-        });
-
+        eventBus.on("touchStatus", onTouchStatusChange);
     }, []);
+
   return (
       <Router>
           <div className={"header"} style={styles}>
@@ -54,7 +51,6 @@ function App() {
               <Home />
             </Route>
           </Switch>
-
       </Router>
   );
 }

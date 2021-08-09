@@ -9,9 +9,11 @@ function LockScreen() {
     const dateOptions = { weekday: 'short', day: 'numeric', month: 'long' };
     const [swipeTextStyles, setSwipeTextStyles] = useState({});
     const [dateTimeStyles, setDateTimeStyles] = useState({});
+    const [footerIconMove, setFooterIconMove] = useState({});
     let currentStatus = '';
     let timeDistance = 0;
     let [x1, x2, y1, y2] = [0,0,0,0];
+    var x;
 
     useEffect(() => {
         handleDate();
@@ -27,11 +29,11 @@ function LockScreen() {
     }
 
     const handleGestureStart =  (event) => {
+        x = event.touches[0].clientX;
         currentStatus = 'start;'
         x1 =  event.touches[0].clientX;
         y1 =  event.touches[0].clientY;
         timeDistance = event.timeStamp;
-        console.log('start', event.touches[0].clientX);
         eventBus.dispatch("touchStatus", { status: 'start'});
         swapSwipeText( 0);
     }
@@ -46,15 +48,28 @@ function LockScreen() {
             timeDistance = event.timeStamp;
             x2 = event.touches[0].clientX;
             y2 = event.touches[0].clientY;
-            const calculatedDistance = calculateDistance(x1, y1, x2, y2);
-            const dateTimeOpacity = calculatedDistance > 100 ? 0 : 1 - (calculatedDistance * 0.01).toFixed(2);
-            const dateTimeMoveDistance = (calculatedDistance > 100 ? -100 :  -calculatedDistance) / 2;
-            const dateTimeXScale = calculatedDistance * 0.01 <= .5  ? 1 + ((calculatedDistance * 0.01 / 6)) : 1.08;
+            const distance = calculateDistance(x1, y1, x2, y2);
+            const dateTimeOpacity = distance > 100 ? 0 : 1 - (distance * 0.01).toFixed(2);
+            const dateTimeMoveDistance = (distance > 100 ? -100 :  -distance) / 2;
+            const dateTimeXScale = distance * 0.01 <= .5  ? 1 + ((distance * 0.01 / 6)) : 1.08;
             // console.log(dateTimeMoveDistance);
             moveDateTime(dateTimeOpacity, dateTimeMoveDistance, dateTimeXScale);
-            eventBus.dispatch("DistanceCalculated", { value: calculatedDistance})
+            moveIcons(distance);
+            // console.log('calculatedDistance', calculatedDistance)
+            eventBus.dispatch("DistanceCalculated", { distance})
         }
     }
+
+    const handleGestureEnd =  (event) => {
+        x2 = event.changedTouches[0].clientX;
+        y2 = event.changedTouches[0].clientY;
+        const distance = calculateDistance(x1, y1, x2, y2);
+        eventBus.dispatch("touchStatus", { status: 'end', distance});
+        swapSwipeText(1);
+        moveDateTime(1, 0);
+        moveIcons( 0);
+    }
+
 
     const swapSwipeText = (opacity) => {
         setSwipeTextStyles({opacity})
@@ -64,10 +79,8 @@ function LockScreen() {
         setDateTimeStyles({opacity, transform: `translate(0, ${move}px) scaleX(${scale})`});
     }
 
-    const handleGestureEnd =  (event) => {
-        eventBus.dispatch("touchStatus", { status: 'end'});
-        swapSwipeText(1);
-        moveDateTime(1, 0);
+    const moveIcons = ( move) => {
+        setFooterIconMove(move);
     }
 
     const calculateDistance = (cx1, cy1, cx2, cy2) => {
@@ -93,8 +106,8 @@ function LockScreen() {
                     <span>Swipe to open</span>
                 </div>
                 <div className={"footer-inner"}>
-                    <span className="material-icons footer-inner__item">photo_camera</span>
-                    <span className="footer-inner__item"><span className={"footer-inner__item--phone material-icons"}>call</span></span>
+                    <span style={{transform: `translate(${-footerIconMove}px, ${footerIconMove}px)`}}  className="material-icons footer-inner__item">photo_camera</span>
+                    <span style={{transform: `translate(${footerIconMove}px, ${footerIconMove}px)`}} className="footer-inner__item"><span className={"footer-inner__item--phone material-icons"}>call</span></span>
                 </div>
             </footer>
         </section>

@@ -3,7 +3,6 @@ import './Header.css';
 function Header() {
     return (<div className={"header"}>
         <span>IR-MCI | Irancell</span>
-        <span id="touch">---</span>
         <span className="header__icons">
             <span className="header__icon material-icons">wifi</span>
             <span className="header__icon material-icons">signal_cellular_alt</span>

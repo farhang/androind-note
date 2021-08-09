@@ -38,6 +38,7 @@
     background-color: var(--secondary);
     border-radius: .75rem;
     padding: .25rem;
+    transition: var(--transition-mode-one);
 }
 
 .footer-inner__item--phone {
