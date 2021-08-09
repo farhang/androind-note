@@ -1,3 +1,7 @@
+.date-time-container {
+    transition: var(--transition-mode-one);
+}
+
 .time {
     text-align: center;
     font-size: 4rem;

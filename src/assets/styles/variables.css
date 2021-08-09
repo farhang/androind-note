@@ -1,5 +1,5 @@
 :root {
   --primary: #4B4C4E;
   --secondary: #ADAFBF;
-  --transition-mode-one: visibility 0s .1s, opacity .1s linear;
+  --transition-mode-one: visibility 0s .1s, opacity .1s linear, visibility 0s linear, transform .1s ease;
 }
