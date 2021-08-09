@@ -20,10 +20,11 @@
 .footer-header {
     text-align: center;
     margin-bottom: .5rem;
+    transition: var(--transition-mode-one);
 }
 
 .footer-inner {
-    margin: 0 0rem;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,5 +38,4 @@
 
 .footer-inner__item--phone {
     transform: rotate(-135deg);
-    transition:
 }

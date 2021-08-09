@@ -7,6 +7,7 @@ function LockScreen() {
     const [currentHour, setCurrentHour] = useState('');
     const [currentMinute, setCurrentMinute] = useState('');
     const dateOptions = { weekday: 'short', day: 'numeric', month: 'long' };
+    const [styles, setStyles] = useState({});
     let currentStatus = '';
     let timeDistance = 0;
     let [x1, x2, y1, y2] = [0,0,0,0];
@@ -29,8 +30,9 @@ function LockScreen() {
         x1 =  event.touches[0].clientX;
         y1 =  event.touches[0].clientY;
         timeDistance = event.timeStamp;
-        console.log('start', event.touches[0].clientX)
-        eventBus.dispatch("touchStatus", { status: 'start'})
+        console.log('start', event.touches[0].clientX);
+        eventBus.dispatch("touchStatus", { status: 'start'});
+        hideSwipeText('hidden', 0);
     }
 
     const handleGestureMove =  (event) => {
@@ -44,12 +46,17 @@ function LockScreen() {
             x2 =  event.touches[0].clientX;
             y2 =  event.touches[0].clientY;
             eventBus.dispatch("DistanceCalculated", { value: calculateDistance(x1, y1, x2, y2)})
+
         }
+    }
+
+    const hideSwipeText = (visibility, opacity) => {
+        setStyles({visibility, opacity})
     }
 
     const handleGestureEnd =  (event) => {
         eventBus.dispatch("touchStatus", { status: 'end'})
-        console.log('end', event);
+        hideSwipeText('visible', 1);
     }
 
     const calculateDistance = (cx1, cy1, cx2, cy2) => {
@@ -57,8 +64,6 @@ function LockScreen() {
         const b = cy1 - cy2;
         return Math.sqrt( a * a + b * b );
     }
-
-
 
     const handleDate = () => {
         setCurrentDate(new Date());
@@ -72,7 +77,7 @@ function LockScreen() {
             <div className="date">{currentDate.toLocaleDateString("en-US", dateOptions)}</div>
 
             <footer className={"footer"}>
-                <div className={"footer-header font-regular"}>
+                <div style={styles} className={"footer-header font-regular"}>
                     <span>Swipe to open</span>
                 </div>
                 <div className={"footer-inner"}>

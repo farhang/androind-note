@@ -3,6 +3,10 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  transition: var(--transition-mode-one);
+  visibility: visible;
+  opacity: 1;
+  width: 100%;
 }
 
 .header__icons {
