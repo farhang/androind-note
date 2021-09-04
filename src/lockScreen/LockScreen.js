@@ -1,8 +1,10 @@
 import './LockScreen.css';
 import {useState, useEffect} from "react";
 import eventBus from "../common/Eventbus";
+import { useHistory } from "react-router-dom";
 
 function LockScreen() {
+    const history = useHistory();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [currentHour, setCurrentHour] = useState('');
     const [currentMinute, setCurrentMinute] = useState('');
@@ -68,6 +70,9 @@ function LockScreen() {
         swapSwipeText(1);
         moveDateTime(1, 0);
         moveIcons( 0);
+        if(distance > 100) {
+            history.push('/home')
+        }
     }
 
 

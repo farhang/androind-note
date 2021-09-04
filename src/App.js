@@ -13,9 +13,9 @@ import eventBus from "./common/Eventbus";
 function App() {
 
     const [styles, setStyles] = useState({});
-    const [distance, setDistance] = useState(0);
+    // const [distance, setDistance] = useState(0);
     const onTouchMove = (event) => {
-       setDistance(event.distance);
+       // setDistance(event.distance);
     }
 
     const onTouchStatusChange = (event) => {
@@ -44,7 +44,7 @@ function App() {
           <Header />
           </div>
           <Switch>
-            <Route path="/">
+            <Route exact path="/">
               <LockScreen />
             </Route>
             <Route path="/home">

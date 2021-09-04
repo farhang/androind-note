@@ -1,0 +1,13 @@
+.material-icon {
+    padding: 1rem;
+    border-radius: 1.25rem;
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: .5rem;
+    box-shadow: 1px 1px 2px 0px rgb(0 0 0 / 44%);
+}
+
+
+.material-icon__text {
+    text-align: center;
+}
