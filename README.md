@@ -1,1 +1,1 @@
-# Note 10 screen lock using react :D
+# Note 10 screenlock page in react :D
